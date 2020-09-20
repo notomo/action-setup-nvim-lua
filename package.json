@@ -1,0 +1,14 @@
+{
+  "name": "action-setup-nvim-lua",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "docker-compose down && docker-compose up -d && docker-compose exec node node src/index.js"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.5",
+    "@actions/github": "^4.0.0",
+    "@actions/tool-cache": "^1.6.0"
+  }
+}

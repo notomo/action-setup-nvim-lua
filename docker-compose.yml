@@ -1,0 +1,13 @@
+# for local test
+
+version: "3"
+services:
+  node:
+    image: "node:12"
+    user: "node"
+    command: "tail -f"
+    working_dir: /home/node/app
+    environment:
+        RUNNER_TEMP: /tmp
+    volumes:
+        - "./:/home/node/app"

@@ -1,0 +1,15 @@
+name: 'action-setup-nvim-lua'
+description: 'Setup lua for test neovim plugin'
+inputs: {}
+
+outputs:
+  lua:
+    description: 'lua executable path'
+  luarocks:
+    description: 'luarocks executable path'
+  vusted:
+    description: 'vusted executable path'
+
+runs:
+  using: 'node12'
+  main: 'src/index.js'
