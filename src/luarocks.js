@@ -4,21 +4,16 @@ const tc = require("@actions/tool-cache");
 const io = require("@actions/io");
 const path = require("path");
 
-async function download(config) {
+async function onLinux(config, luajit) {
   const version = config.luaRocksVersion;
   const installPath = config.installPath;
-  const targetPath = path.join(installPath, `luarocks-${version}`);
+  const dirName = `luarocks-${version}`;
+  const targetPath = path.join(installPath, dirName);
   const tar = await tc.downloadTool(
-    `https://luarocks.org/releases/luarocks-${version}.tar.gz`
+    `https://luarocks.org/releases/${dirName}.tar.gz`
   );
   await io.mkdirP(targetPath);
   await tc.extractTar(tar, installPath);
-
-  return targetPath;
-}
-
-async function onLinux(config, luajit) {
-  const targetPath = await download(config);
 
   await exec.exec("./configure", ["--with-lua-bin=" + luajit.bin], {
     cwd: targetPath
@@ -34,10 +29,19 @@ async function onLinux(config, luajit) {
 }
 
 async function onWindows(config, luajit) {
-  const targetPath = await download(config);
+  const version = config.luaRocksVersion;
+  const installPath = config.installPath;
+  const dirName = `luarocks-${version}-win32`;
+  const targetPath = path.join(installPath, dirName);
+  const zip = await tc.downloadTool(
+    `https://luarocks.org/releases/${dirName}.zip`
+  );
+  await io.mkdirP(targetPath);
+  await tc.extractZip(zip, installPath);
 
+  const luarocksPath = path.join(luajit.root, "luarocks");
   await exec.exec(
-    "install.bat",
+    "./install.bat",
     [
       "/F",
       "/MW",
@@ -46,7 +50,7 @@ async function onWindows(config, luajit) {
       "/LIB",
       luajit.bin,
       "/P",
-      luajit.root,
+      luarocksPath,
       "/NOADMIN",
       "/SELFCONTAINED",
       "/Q"
@@ -56,7 +60,7 @@ async function onWindows(config, luajit) {
     }
   );
 
-  const bin = targetPath;
+  const bin = luarocksPath;
   core.addPath(bin);
 
   return { bin: bin, executable: path.join(bin, "luarocks.bat") };
