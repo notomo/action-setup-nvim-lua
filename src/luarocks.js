@@ -20,7 +20,7 @@ async function download(config) {
 async function onLinux(config, luajit) {
   const targetPath = await download(config);
 
-  await exec.exec(`./configure --with-lua-bin=${luajit.bin}`, undefined, {
+  await exec.exec("./configure", ["--with-lua-bin=" + luajit.bin], {
     cwd: targetPath
   });
   await exec.exec("make", undefined, {
@@ -37,8 +37,20 @@ async function onWindows(config, luajit) {
   const targetPath = await download(config);
 
   await exec.exec(
-    `install.bat /F /MW /LUA ${luajit.root} /LIB ${luajit.bin} /P ${luajit.root} /NOADMIN /SELFCONTAINED /Q`,
-    undefined,
+    "install.bat",
+    [
+      "/F",
+      "/MW",
+      "/LUA",
+      luajit.root,
+      "/LIB",
+      luajit.bin,
+      "/P",
+      luajit.root,
+      "/NOADMIN",
+      "/SELFCONTAINED",
+      "/Q"
+    ],
     {
       cwd: targetPath
     }

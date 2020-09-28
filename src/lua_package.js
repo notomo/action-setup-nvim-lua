@@ -2,7 +2,7 @@ const exec = require("@actions/exec");
 
 async function install(config, luarocks) {
   for (const name of config.packageNames) {
-    await exec.exec(`${luarocks.executable} install ${name}`, undefined, {});
+    await exec.exec(luarocks.executable, ["install", name], {});
   }
 }
 
