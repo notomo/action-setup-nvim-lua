@@ -1,9 +1,9 @@
 name: 'action-setup-nvim-lua'
-description: 'Setup lua for test neovim plugin'
+description: 'Setup lua for testing neovim plugin'
 inputs: {}
 
 outputs:
-  lua:
+  luajit:
     description: 'lua executable path'
   luarocks:
     description: 'luarocks executable path'
