@@ -5,18 +5,18 @@ const io = require("@actions/io");
 const path = require("path");
 
 async function onLinux(config) {
-  return install(config, "libluajit.so");
+  return install(config, [], "libluajit.so");
 }
 
 async function onMacOs(config) {
-  return install(config, "libluajit.so");
+  return install(config, ["MACOSX_DEPLOYMENT_TARGET=10.15"], "libluajit.so");
 }
 
 async function onWindows(config) {
-  return install(config, "lua51.dll", ".exe");
+  return install(config, [], "lua51.dll", ".exe");
 }
 
-async function install(config, dlib, binSuffix = "") {
+async function install(config, args, dlib, binSuffix = "") {
   const version = config.luajitVersion;
   const installPath = config.installPath;
   const targetPath = path.join(installPath, `LuaJIT-${version}`);
@@ -26,7 +26,7 @@ async function install(config, dlib, binSuffix = "") {
   await io.mkdirP(targetPath);
   await tc.extractTar(tar, installPath);
 
-  await exec.exec("make", undefined, {
+  await exec.exec("make", args, {
     cwd: targetPath
   });
 
