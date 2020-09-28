@@ -4,7 +4,7 @@ const tc = require("@actions/tool-cache");
 const io = require("@actions/io");
 const path = require("path");
 
-async function onLinux(config, lua) {
+async function download(config) {
   const version = config.luaRocksVersion;
   const installPath = config.installPath;
   const targetPath = path.join(installPath, `luarocks-${version}`);
@@ -14,10 +14,15 @@ async function onLinux(config, lua) {
   await io.mkdirP(targetPath);
   await tc.extractTar(tar, installPath);
 
-  await exec.exec(`./configure --with-lua-bin=${lua.bin}`, undefined, {
+  return targetPath;
+}
+
+async function onLinux(config, luajit) {
+  const targetPath = await download(config);
+
+  await exec.exec(`./configure --with-lua-bin=${luajit.bin}`, undefined, {
     cwd: targetPath
   });
-
   await exec.exec("make", undefined, {
     cwd: targetPath
   });
@@ -25,21 +30,28 @@ async function onLinux(config, lua) {
   const bin = targetPath;
   core.addPath(bin);
 
-  await exec.exec("luarocks --version");
-
   return { bin: bin, executable: path.join(bin, "luarocks") };
 }
 
-async function onMacOs(_config) {
-  throw new Error("not implemented");
-}
+async function onWindows(config, luajit) {
+  const targetPath = await download(config);
 
-async function onWindows(_config) {
-  throw new Error("not implemented");
+  await exec.exec(
+    `install.bat /F /MW /LUA ${luajit.root} /LIB ${luajit.bin} /P ${luajit.root} /NOADMIN /SELFCONTAINED /Q`,
+    undefined,
+    {
+      cwd: targetPath
+    }
+  );
+
+  const bin = targetPath;
+  core.addPath(bin);
+
+  return { bin: bin, executable: path.join(bin, "luarocks.bat") };
 }
 
 module.exports.installer = {
   onLinux: onLinux,
-  onMacOs: onMacOs,
+  onMacOs: onLinux,
   onWindows: onWindows
 };

@@ -16,8 +16,9 @@ function os() {
 function load() {
   return {
     os: os(),
-    luaVersion: "5.3.5",
+    luajitVersion: "2.1.0-beta3",
     luaRocksVersion: "3.3.1",
+    packageNames: ["busted"],
     installPath: path.join(process.env.HOME, ".local")
   };
 }

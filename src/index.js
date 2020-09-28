@@ -1,23 +1,20 @@
 const core = require("@actions/core");
 
 const loadConfig = require("./config").load;
-const luaInstaller = require("./lua").installer;
+const luajitInstaller = require("./luajit").installer;
 const luaRocksInstaller = require("./luarocks").installer;
 const luaPackageInstaller = require("./lua_package").installer;
-const vustedInstaller = require("./vusted").installer;
 
 async function main() {
   const config = loadConfig();
   core.debug(config);
 
-  const lua = await install(config, luaInstaller);
-  const luarocks = await install(config, luaRocksInstaller, lua);
-  await install(config, luaPackageInstaller, luarocks, ["busted"]);
-  const vusted = await install(config, vustedInstaller);
+  const luajit = await install(config, luajitInstaller);
+  const luarocks = await install(config, luaRocksInstaller, luajit);
+  await install(config, luaPackageInstaller, luarocks);
 
-  core.setOutput("lua", lua.executable);
+  core.setOutput("luajit", luajit.executable);
   core.setOutput("luarocks", luarocks.executable);
-  core.setOutput("vusted", vusted.executable);
 }
 
 async function install(config, installer, ...args) {

@@ -7,8 +7,6 @@ outputs:
     description: 'lua executable path'
   luarocks:
     description: 'luarocks executable path'
-  vusted:
-    description: 'vusted executable path'
 
 runs:
   using: 'node12'
