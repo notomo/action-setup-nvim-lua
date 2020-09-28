@@ -3,7 +3,6 @@ const core = require("@actions/core");
 const loadConfig = require("./config").load;
 const luajitInstaller = require("./luajit").installer;
 const luaRocksInstaller = require("./luarocks").installer;
-const luaPackageInstaller = require("./lua_package").installer;
 
 async function main() {
   const config = loadConfig();
@@ -11,7 +10,6 @@ async function main() {
 
   const luajit = await install(config, luajitInstaller);
   const luarocks = await install(config, luaRocksInstaller, luajit);
-  await install(config, luaPackageInstaller, luarocks);
 
   core.setOutput("luajit", luajit.executable);
   core.setOutput("luarocks", luarocks.executable);

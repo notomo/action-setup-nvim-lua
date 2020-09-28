@@ -1,4 +1,5 @@
 const path = require("path");
+const core = require("@actions/core");
 
 function getOS() {
   switch (process.platform) {
@@ -13,6 +14,14 @@ function getOS() {
   }
 }
 
+function getLuarocksVersion() {
+  const version = core.getInput("luarocks-version");
+  if (version === "") {
+    return "3.3.1";
+  }
+  return version;
+}
+
 function load() {
   let home = process.env.HOME;
   const os = getOS();
@@ -22,8 +31,7 @@ function load() {
   return {
     os: os,
     luajitVersion: "2.1.0-beta3",
-    luaRocksVersion: "3.3.1",
-    packageNames: ["busted"],
+    luaRocksVersion: getLuarocksVersion(),
     installPath: path.join(home, ".local")
   };
 }
