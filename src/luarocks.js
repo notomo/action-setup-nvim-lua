@@ -25,6 +25,16 @@ async function onLinux(config, luajit) {
   const bin = targetPath;
   core.addPath(bin);
 
+  const LUA_PATH =
+    path.join(targetPath, "lua_modules/share/lua/5.1/?.lua;") +
+    path.join(targetPath, "lua_modules/share/lua/5.1/?/init.lua");
+  core.exportVariable("LUA_PATH", LUA_PATH);
+  core.debug(`LUA_PATH=${LUA_PATH}`);
+
+  const LUA_CPATH = path.join(targetPath, "lua_modules/lib/lua/5.1/?.so");
+  core.exportVariable("LUA_CPATH", LUA_CPATH);
+  core.debug(`LUA_CPATH=${LUA_CPATH}`);
+
   return { bin: bin, executable: path.join(bin, "luarocks") };
 }
 
@@ -62,6 +72,16 @@ async function onWindows(config, luajit) {
 
   const bin = luarocksPath;
   core.addPath(bin);
+
+  const LUA_PATH =
+    path.join(luarocksPath, "systree/share/lua/5.1/?.lua;") +
+    path.join(luarocksPath, "systree/share/lua/5.1/?/init.lua");
+  core.exportVariable("LUA_PATH", LUA_PATH);
+  core.debug(`LUA_PATH=${LUA_PATH}`);
+
+  const LUA_CPATH = path.join(luarocksPath, "systree/lib/lua/5.1/?.dll");
+  core.exportVariable("LUA_CPATH", LUA_CPATH);
+  core.debug(`LUA_CPATH=${LUA_CPATH}`);
 
   return { bin: bin, executable: path.join(bin, "luarocks.bat") };
 }

@@ -14,4 +14,6 @@ jobs:
       - uses: actions/setup-node@v1
       - run: npm ci
       - uses: ./
+        id: setup
       - run: luarocks install busted
+      - run: ${{ steps.setup.outputs.luajit }} -e 'require("busted")'
