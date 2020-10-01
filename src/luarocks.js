@@ -35,6 +35,9 @@ async function onLinux(config, luajit) {
   core.exportVariable("LUA_CPATH", LUA_CPATH);
   core.debug(`LUA_CPATH=${LUA_CPATH}`);
 
+  const module_bin = path.join(targetPath, "lua_modules/bin");
+  core.addPath(module_bin);
+
   return { bin: bin, executable: path.join(bin, "luarocks") };
 }
 
@@ -82,6 +85,9 @@ async function onWindows(config, luajit) {
   const LUA_CPATH = path.join(luarocksPath, "systree/lib/lua/5.1/?.dll");
   core.exportVariable("LUA_CPATH", LUA_CPATH);
   core.debug(`LUA_CPATH=${LUA_CPATH}`);
+
+  const module_bin = path.join(luarocksPath, "systree/bin");
+  core.addPath(module_bin);
 
   return { bin: bin, executable: path.join(bin, "luarocks.bat") };
 }

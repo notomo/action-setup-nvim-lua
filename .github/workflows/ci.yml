@@ -17,3 +17,4 @@ jobs:
         id: setup
       - run: luarocks install busted
       - run: ${{ steps.setup.outputs.luajit }} -e "require('busted')"
+      - run: busted --version
