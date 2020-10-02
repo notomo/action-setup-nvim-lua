@@ -13,5 +13,3 @@ jobs:
         with:
           BUILD_COMMAND: npm ci
           CLEAN_TARGETS: "*.yml,*.json,*.md,.gitignore,.github"
-          TEST_TAG_PREFIX: test/
-          CLEAN_TEST_TAG: true
