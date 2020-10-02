@@ -1,0 +1,17 @@
+name: release
+on:
+ push:
+   tags:
+     - "v*"
+
+jobs:
+  release:
+    name: Release
+    runs-on: ${{ ubuntu-latest }}
+    steps:
+      - uses: technote-space/release-github-actions@v6
+        with:
+          BUILD_COMMAND: npm ci
+          CLEAN_TARGETS: *.yml,*.json,*.md,.gitignore
+          TEST_TAG_PREFIX: test/
+          CLEAN_TEST_TAG: true
