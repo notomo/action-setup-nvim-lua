@@ -2,6 +2,8 @@
   "name": "action-setup-nvim-lua",
   "version": "0.0.0",
   "description": "",
+  "private": true,
+  "license": "MIT",
   "main": "src/index.js",
   "scripts": {
     "test": "docker-compose down && docker-compose up -d && docker-compose exec node node src/index.js"
