@@ -17,7 +17,7 @@ function getOS() {
 function getLuarocksVersion() {
   const version = core.getInput("luarocks-version");
   if (version === "") {
-    return "3.3.1";
+    throw new Error("`luarocks-version` should not be empty");
   }
   return version;
 }
