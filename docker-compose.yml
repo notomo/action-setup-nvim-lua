@@ -3,11 +3,12 @@
 version: "3"
 services:
   node:
-    image: "node:12"
+    image: "node:16"
     user: "node"
     command: "tail -f"
     working_dir: /home/node/app
     environment:
         RUNNER_TEMP: /tmp
+        INPUT_LUAROCKS-VERSION: 3.9.0
     volumes:
         - "./:/home/node/app"
