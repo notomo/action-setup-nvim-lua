@@ -4,7 +4,7 @@ inputs:
   luarocks-version:
     description: 'luarocks version'
     required: false
-    default: '3.7.0'
+    default: '3.9.0'
 
 outputs:
   luajit:
@@ -13,5 +13,5 @@ outputs:
     description: 'luarocks executable path'
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'src/index.js'
