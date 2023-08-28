@@ -21,7 +21,7 @@ async function install(config, args, dlib, binSuffix = "") {
   const installPath = config.installPath;
   const targetPath = path.join(installPath, `LuaJIT-${version}`);
   const tar = await tc.downloadTool(
-    `https://luajit.org/download/LuaJIT-${version}.tar.gz`
+    `https://github.com/LuaJIT/LuaJIT/archive/refs/tags/v${version}.tar.gz`
   );
   await io.mkdirP(targetPath);
   await tc.extractTar(tar, installPath);

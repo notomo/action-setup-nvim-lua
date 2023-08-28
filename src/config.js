@@ -30,7 +30,7 @@ function load() {
   }
   return {
     os: os,
-    luajitVersion: "2.1.0-beta3",
+    luajitVersion: "2.1.ROLLING",
     luaRocksVersion: getLuarocksVersion(),
     installPath: path.join(home, ".local")
   };
