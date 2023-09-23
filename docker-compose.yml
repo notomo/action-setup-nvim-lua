@@ -3,7 +3,7 @@
 version: "3"
 services:
   node:
-    image: "node:16"
+    image: "node:20"
     user: "node"
     command: "tail -f"
     working_dir: /home/node/app

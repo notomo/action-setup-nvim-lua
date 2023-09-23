@@ -13,5 +13,5 @@ outputs:
     description: 'luarocks executable path'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'src/index.js'
