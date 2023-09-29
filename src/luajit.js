@@ -27,7 +27,7 @@ async function install(config, args, dlib, binSuffix = "") {
   await tc.extractTar(tar, installPath);
 
   await exec.exec("make", args, {
-    cwd: targetPath
+    cwd: targetPath,
   });
 
   const exe = "luajit" + binSuffix;
@@ -51,12 +51,12 @@ async function install(config, args, dlib, binSuffix = "") {
     bin: bin,
     executable: path.join(bin, exe),
     lib: lib,
-    root: targetPath
+    root: targetPath,
   };
 }
 
 module.exports.installer = {
   onLinux: onLinux,
   onMacOs: onMacOs,
-  onWindows: onWindows
+  onWindows: onWindows,
 };

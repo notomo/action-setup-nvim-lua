@@ -20,14 +20,14 @@ async function onLinux(config, luajit) {
     "./configure",
     ["--with-lua-bin=" + luajit.bin, "--prefix=" + prefixPath],
     {
-      cwd: targetPath
+      cwd: targetPath,
     }
   );
   await exec.exec("make", undefined, {
-    cwd: targetPath
+    cwd: targetPath,
   });
   await exec.exec("make", ["install"], {
-    cwd: targetPath
+    cwd: targetPath,
   });
 
   const bin = targetPath;
@@ -67,10 +67,10 @@ async function onWindows(config, luajit) {
       luarocksPath,
       "/NOADMIN",
       "/SELFCONTAINED",
-      "/Q"
+      "/Q",
     ],
     {
-      cwd: targetPath
+      cwd: targetPath,
     }
   );
 
@@ -90,10 +90,10 @@ async function exportPath(executable) {
   let PATH = "";
   await exec.exec(executable, ["path", "--lr-bin"], {
     listeners: {
-      stdout: data => {
+      stdout: (data) => {
         PATH += data.toString();
-      }
-    }
+      },
+    },
   });
   if (PATH != "") {
     core.addPath(PATH.trim());
@@ -102,10 +102,10 @@ async function exportPath(executable) {
   let LUA_PATH = "";
   await exec.exec(executable, ["path", "--lr-path"], {
     listeners: {
-      stdout: data => {
+      stdout: (data) => {
         LUA_PATH += data.toString();
-      }
-    }
+      },
+    },
   });
   if (LUA_PATH != "") {
     core.exportVariable("LUA_PATH", LUA_PATH.trim());
@@ -114,10 +114,10 @@ async function exportPath(executable) {
   let LUA_CPATH = "";
   await exec.exec(executable, ["path", "--lr-cpath"], {
     listeners: {
-      stdout: data => {
+      stdout: (data) => {
         LUA_CPATH += data.toString();
-      }
-    }
+      },
+    },
   });
   if (LUA_CPATH != "") {
     core.exportVariable("LUA_CPATH", LUA_CPATH.trim());
@@ -127,5 +127,5 @@ async function exportPath(executable) {
 module.exports.installer = {
   onLinux: onLinux,
   onMacOs: onLinux,
-  onWindows: onWindows
+  onWindows: onWindows,
 };
