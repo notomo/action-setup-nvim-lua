@@ -3,6 +3,7 @@ const exec = require("@actions/exec");
 const tc = require("@actions/tool-cache");
 const io = require("@actions/io");
 const path = require("path");
+const fs = require("fs");
 
 async function onLinux(config, luajit) {
   const version = config.luaRocksVersion;
@@ -20,14 +21,14 @@ async function onLinux(config, luajit) {
     "./configure",
     ["--with-lua-bin=" + luajit.bin, "--prefix=" + prefixPath],
     {
-      cwd: targetPath
+      cwd: targetPath,
     }
   );
   await exec.exec("make", undefined, {
-    cwd: targetPath
+    cwd: targetPath,
   });
   await exec.exec("make", ["install"], {
-    cwd: targetPath
+    cwd: targetPath,
   });
 
   const bin = targetPath;
@@ -53,6 +54,16 @@ async function onWindows(config, luajit) {
   await io.mkdirP(targetPath);
   await tc.extractZip(zip, installPath);
 
+  // NOTE: workaround for `could not analyse the runtime used, defaulting to MSVCR80` in luarocks install.
+  // The warning causes lfs issue: `pl.path requires LuaFileSystem`
+  const installerPath = path.join(targetPath, "install.bat");
+  const installerScript = fs.readFileSync(installerPath, { encoding: "utf-8" });
+  const patchedScript = installerScript.replace(
+    `vars.LUA_RUNTIME = "MSVCR80"`,
+    `vars.LUA_RUNTIME = "MSVCRT"`
+  );
+  fs.writeFileSync(installerPath, patchedScript);
+
   const luarocksPath = path.join(luajit.root, "luarocks");
   await exec.exec(
     "./install.bat",
@@ -67,10 +78,10 @@ async function onWindows(config, luajit) {
       luarocksPath,
       "/NOADMIN",
       "/SELFCONTAINED",
-      "/Q"
+      "/Q",
     ],
     {
-      cwd: targetPath
+      cwd: targetPath,
     }
   );
 
@@ -90,10 +101,10 @@ async function exportPath(executable) {
   let PATH = "";
   await exec.exec(executable, ["path", "--lr-bin"], {
     listeners: {
-      stdout: data => {
+      stdout: (data) => {
         PATH += data.toString();
-      }
-    }
+      },
+    },
   });
   if (PATH != "") {
     core.addPath(PATH.trim());
@@ -102,10 +113,10 @@ async function exportPath(executable) {
   let LUA_PATH = "";
   await exec.exec(executable, ["path", "--lr-path"], {
     listeners: {
-      stdout: data => {
+      stdout: (data) => {
         LUA_PATH += data.toString();
-      }
-    }
+      },
+    },
   });
   if (LUA_PATH != "") {
     core.exportVariable("LUA_PATH", LUA_PATH.trim());
@@ -114,10 +125,10 @@ async function exportPath(executable) {
   let LUA_CPATH = "";
   await exec.exec(executable, ["path", "--lr-cpath"], {
     listeners: {
-      stdout: data => {
+      stdout: (data) => {
         LUA_CPATH += data.toString();
-      }
-    }
+      },
+    },
   });
   if (LUA_CPATH != "") {
     core.exportVariable("LUA_CPATH", LUA_CPATH.trim());
@@ -127,5 +138,5 @@ async function exportPath(executable) {
 module.exports.installer = {
   onLinux: onLinux,
   onMacOs: onLinux,
-  onWindows: onWindows
+  onWindows: onWindows,
 };
