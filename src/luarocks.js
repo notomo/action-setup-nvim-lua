@@ -3,6 +3,7 @@ const exec = require("@actions/exec");
 const tc = require("@actions/tool-cache");
 const io = require("@actions/io");
 const path = require("path");
+const fs = require("fs");
 
 async function onLinux(config, luajit) {
   const version = config.luaRocksVersion;
@@ -52,6 +53,16 @@ async function onWindows(config, luajit) {
   );
   await io.mkdirP(targetPath);
   await tc.extractZip(zip, installPath);
+
+  // NOTE: workaround for `could not analyse the runtime used, defaulting to MSVCR80` in luarocks install.
+  // The warning causes lfs issue: `pl.path requires LuaFileSystem`
+  const installerPath = path.join(targetPath, "install.bat");
+  const installerScript = fs.readFileSync(installerPath, { encoding: "utf-8" });
+  const patchedScript = installerScript.replace(
+    `vars.LUA_RUNTIME = "MSVCR80"`,
+    `vars.LUA_RUNTIME = "MSVCRT"`
+  );
+  fs.writeFileSync(installerPath, patchedScript);
 
   const luarocksPath = path.join(luajit.root, "luarocks");
   await exec.exec(
