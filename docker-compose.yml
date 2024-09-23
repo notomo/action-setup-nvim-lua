@@ -1,6 +1,5 @@
 # for local test
 
-version: "3"
 services:
   node:
     image: "node:20"
@@ -9,6 +8,6 @@ services:
     working_dir: /home/node/app
     environment:
         RUNNER_TEMP: /tmp
-        INPUT_LUAROCKS-VERSION: 3.9.2
+        INPUT_LUAROCKS-VERSION: 3.11.1
     volumes:
         - "./:/home/node/app"
