@@ -5,7 +5,7 @@ Setup environments for neovim plugin written in lua
 ### Usage
 
 ```yaml
-- uses: notomo/action-setup-nvim-lua@v1
+- uses: notomo/action-setup-nvim-lua@v2
 - run: luarocks install vusted
 ```
 
