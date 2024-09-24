@@ -12,7 +12,7 @@ async function onLinux(config, luajit) {
   const dirName = `luarocks-${version}`;
   const targetPath = path.join(installPath, dirName);
   const tar = await tc.downloadTool(
-    `https://luarocks.org/releases/${dirName}.tar.gz`
+    `https://luarocks.org/releases/${dirName}.tar.gz`,
   );
   await io.mkdirP(targetPath);
   await tc.extractTar(tar, installPath);
@@ -22,7 +22,7 @@ async function onLinux(config, luajit) {
     ["--with-lua-bin=" + luajit.bin, "--prefix=" + prefixPath],
     {
       cwd: targetPath,
-    }
+    },
   );
   await exec.exec("make", undefined, {
     cwd: targetPath,
@@ -31,11 +31,7 @@ async function onLinux(config, luajit) {
     cwd: targetPath,
   });
 
-  const bin = targetPath;
-  core.addPath(bin);
-
-  const module_bin = path.join(bin, "lua_modules/bin");
-  core.addPath(module_bin);
+  const bin = path.join(prefixPath, "bin");
 
   const executable = path.join(bin, "luarocks");
   await exportPath(executable);
@@ -49,7 +45,7 @@ async function onWindows(config, luajit) {
   const dirName = `luarocks-${version}-win32`;
   const targetPath = path.join(installPath, dirName);
   const zip = await tc.downloadTool(
-    `https://luarocks.org/releases/${dirName}.zip`
+    `https://luarocks.org/releases/${dirName}.zip`,
   );
   await io.mkdirP(targetPath);
   await tc.extractZip(zip, installPath);
@@ -60,7 +56,7 @@ async function onWindows(config, luajit) {
   const installerScript = fs.readFileSync(installerPath, { encoding: "utf-8" });
   const patchedScript = installerScript.replace(
     `vars.LUA_RUNTIME = "MSVCR80"`,
-    `vars.LUA_RUNTIME = "MSVCRT"`
+    `vars.LUA_RUNTIME = "MSVCRT"`,
   );
   fs.writeFileSync(installerPath, patchedScript);
 
@@ -82,7 +78,7 @@ async function onWindows(config, luajit) {
     ],
     {
       cwd: targetPath,
-    }
+    },
   );
 
   const bin = luarocksPath;
