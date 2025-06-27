@@ -4,7 +4,7 @@ inputs:
   luarocks-version:
     description: 'luarocks version (minimum: 3.11.1)'
     required: false
-    default: '3.11.1'
+    default: '3.12.2'
 
 outputs:
   luajit:
