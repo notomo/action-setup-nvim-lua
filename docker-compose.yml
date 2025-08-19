@@ -2,7 +2,7 @@
 
 services:
   node:
-    image: "node:20"
+    image: "node:24"
     user: "node"
     command: "tail -f"
     working_dir: /home/node/app

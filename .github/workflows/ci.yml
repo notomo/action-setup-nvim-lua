@@ -10,6 +10,9 @@ on:
     branches:
       - '*'
 
+env:
+  NODE_VERSION: '24'
+
 jobs:
   test:
     name: Test
@@ -22,6 +25,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
       - run: npm ci
       - uses: ./
