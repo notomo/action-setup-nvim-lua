@@ -10,6 +10,8 @@ updates:
       timezone: "Asia/Tokyo"
     assignees:
       - "notomo"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -20,3 +22,5 @@ updates:
       timezone: "Asia/Tokyo"
     assignees:
       - "notomo"
+    cooldown:
+      default-days: 7
