@@ -1,8 +1,8 @@
-const core = require("@actions/core");
-const exec = require("@actions/exec");
-const tc = require("@actions/tool-cache");
-const io = require("@actions/io");
-const path = require("path");
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
+import * as tc from "@actions/tool-cache";
+import * as io from "@actions/io";
+import path from "path";
 
 async function onLinux(config) {
   return install(config, [], "libluajit.so");
@@ -55,7 +55,7 @@ async function install(config, args, dlib, binSuffix = "") {
   };
 }
 
-module.exports.installer = {
+export const installer = {
   onLinux: onLinux,
   onMacOs: onMacOs,
   onWindows: onWindows,

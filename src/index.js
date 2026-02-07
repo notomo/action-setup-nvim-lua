@@ -1,8 +1,8 @@
-const core = require("@actions/core");
+import * as core from "@actions/core";
 
-const loadConfig = require("./config").load;
-const luajitInstaller = require("./luajit").installer;
-const luaRocksInstaller = require("./luarocks").installer;
+import { load as loadConfig } from "./config.js";
+import { installer as luajitInstaller } from "./luajit.js";
+import { installer as luaRocksInstaller } from "./luarocks.js";
 
 async function main() {
   const config = loadConfig();

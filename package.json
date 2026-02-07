@@ -4,13 +4,14 @@
   "description": "",
   "private": true,
   "license": "MIT",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
     "test": "docker-compose down && docker-compose up -d && docker-compose exec node node src/index.js"
   },
   "dependencies": {
-    "@actions/core": "^2.0.2",
+    "@actions/core": "^3.0.0",
     "@actions/github": "^9.0.0",
-    "@actions/tool-cache": "^3.0.0"
+    "@actions/tool-cache": "^4.0.0"
   }
 }
