@@ -10,7 +10,7 @@
     "test": "docker-compose down && docker-compose up -d && docker-compose exec node node src/index.js"
   },
   "dependencies": {
-    "@actions/core": "^3.0.0",
+    "@actions/core": "^3.0.1",
     "@actions/github": "^9.1.1",
     "@actions/tool-cache": "^4.0.0"
   }
