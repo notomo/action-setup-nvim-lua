@@ -12,8 +12,18 @@ async function onLinux(config) {
 async function onMacOs(config) {
   return install(config, {
     dlib: "libluajit.so",
-    env: { MACOSX_DEPLOYMENT_TARGET: "10.15" },
+    env: { MACOSX_DEPLOYMENT_TARGET: await deploymentTarget() },
   });
+}
+
+// NOTE: luarocks derives the same target for building rocks, so keep them in sync.
+// arm64 has no target below 11.0 anyway.
+async function deploymentTarget() {
+  const { stdout } = await exec.getExecOutput("sw_vers", ["-productVersion"], {
+    silent: true,
+  });
+  const major = Number(stdout.trim().split(".")[0]);
+  return major >= 11 ? "11.0" : "10.8";
 }
 
 async function onWindows(config) {
