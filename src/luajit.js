@@ -6,18 +6,30 @@ import path from "path";
 import fs from "fs";
 
 async function onLinux(config) {
-  return install(config, {}, "libluajit.so");
+  return install(config, { dlib: "libluajit.so" });
 }
 
 async function onMacOs(config) {
-  return install(config, { MACOSX_DEPLOYMENT_TARGET: "10.15" }, "libluajit.so");
+  return install(config, {
+    dlib: "libluajit.so",
+    env: { MACOSX_DEPLOYMENT_TARGET: "10.15" },
+  });
 }
 
 async function onWindows(config) {
-  return install(config, {}, "lua51.dll", ".exe");
+  // NOTE: src/Makefile emits cmd.exe syntax once it detects a non-MSYS Windows host,
+  // so pin the shell instead of letting make pick up a bash from PATH.
+  return install(config, {
+    dlib: "lua51.dll",
+    binSuffix: ".exe",
+    makeArgs: ["SHELL=cmd.exe"],
+  });
 }
 
-async function install(config, env, dlib, binSuffix = "") {
+async function install(
+  config,
+  { dlib, binSuffix = "", env = {}, makeArgs = [] },
+) {
   const installPath = config.installPath;
   const targetPath = path.join(installPath, "LuaJIT");
   const extractPath = path.join(installPath, "LuaJIT-archive");
@@ -39,7 +51,7 @@ async function install(config, env, dlib, binSuffix = "") {
   await io.mv(path.join(extractPath, roots[0]), targetPath);
   await io.rmRF(extractPath);
 
-  await exec.exec("make", [], {
+  await exec.exec("make", makeArgs, {
     cwd: targetPath,
     env: { ...process.env, ...env },
   });
