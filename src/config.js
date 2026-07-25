@@ -1,5 +1,5 @@
-const path = require("path");
-const core = require("@actions/core");
+import path from "path";
+import * as core from "@actions/core";
 
 function getOS() {
   switch (process.platform) {
@@ -22,7 +22,7 @@ function getLuarocksVersion() {
   return version;
 }
 
-function load() {
+export function load() {
   let home = process.env.HOME;
   const os = getOS();
   if (os === "windows") {
@@ -30,10 +30,8 @@ function load() {
   }
   return {
     os: os,
-    luajitVersion: "2.1.ROLLING",
+    luajitRef: "v2.1",
     luaRocksVersion: getLuarocksVersion(),
     installPath: path.join(home, ".local"),
   };
 }
-
-module.exports.load = load;
